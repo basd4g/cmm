@@ -1,4 +1,6 @@
 cmm
 pl0i/*
+pl0i
 *.o
 *.c
+code.output
