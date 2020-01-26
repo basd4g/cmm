@@ -34,9 +34,9 @@ $ ./pl0i ../code.output
 
 1. conditions
 
-&& ... AND
-|| ... OR
-! ... NOT
+- `&&` ... AND
+- `||` ... OR
+- `!` ... NOT
 
 There is connect conditions.
 
