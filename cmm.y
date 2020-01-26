@@ -44,6 +44,7 @@ typedef struct Codeval {
 %token COLEQ
 %token GE GT LE LT NE EQ
 %token RETURN
+%token DENIAL
 %%
 
 program : fdecls main {
@@ -375,6 +376,12 @@ cond	: E GT E
 	    $$.code = mergecode(mergecode($1.code, $3.code),
 				makecode(O_OPR, 0, 8));
 	  }
+        | DENIAL cond
+          {
+            cptr *tmp;
+            tmp = mergecode($2.code,makecode(O_LIT, 0, 1));
+            $$.code = mergecode(tmp,makecode(O_OPR, 0, 3));
+          }
 	;
 
 E	: E PLUS  T

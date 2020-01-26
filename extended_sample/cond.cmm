@@ -1,0 +1,9 @@
+main {
+  var i;
+  read i;
+  if i>4 then write 0;
+  else write 1;
+  endif;
+  
+  writeln;
+}

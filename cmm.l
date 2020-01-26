@@ -32,6 +32,7 @@
 "<"		{ ECHO;  return LT; }
 "!="		{ ECHO;  return NE; }
 "=="		{ ECHO;  return EQ; }
+"!"             { ECHO;  return DENIAL; }
 [0-9]+		{ ECHO;  
                   yylval.val = atoi(yytext);
 		  return NUMBER;
