@@ -30,6 +30,16 @@ $ make
 $ ./pl0i ../code.output
 ```
 
+## Extended syntax
+
+1. conditions
+
+&& ... AND
+|| ... OR
+! ... NOT
+
+There is connect conditions.
+
 ## License
 
 GPL ([License](./LICENSE))
