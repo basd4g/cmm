@@ -22,6 +22,7 @@
 "else"		{ ECHO;  return ELSE; }
 "endif"		{ ECHO;  return ENDIF; } 
 "while"		{ ECHO;  return WHILE; }
+"for"		{ ECHO;  return FOR; }
 "do"		{ ECHO;  return DO; }
 "read"		{ ECHO;  return READ; }
 "return"	{ ECHO;  return RETURN; }

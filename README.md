@@ -40,6 +40,31 @@ $ ./pl0i ../code.output
 
 There is connect conditions.
 
+```cmm
+main {
+  var i;
+  read i;
+  if ! i>0 then
+    write 0;
+  else
+    write 1;
+  writeln;
+}
+```
+
+2. for
+
+for &lt;initial statement&gt; &lt;conditions&gt;; &lt;increment statement&gt; do &lt;statement&gt;
+
+```cmm
+main {
+  var i;
+  for i:=0; i<10; i:=i+1; do 
+    write i;
+  writeln;
+}
+```
+
 ## License
 
 GPL ([License](./LICENSE))

@@ -39,7 +39,9 @@ typedef struct Codeval {
 %token MULT DIV
 %token NUMBER
 %token IF THEN ELSE ENDIF
-%token WHILE DO
+%token WHILE
+%token DO
+%token FOR
 %token READ
 %token COLEQ
 %token GE GT LE LT NE EQ
@@ -277,6 +279,7 @@ st	: WRITE E SEMI
 	  }
 	| ifstmt 
 	| whilestmt
+        | forstmt
 	| { addlist("block", BLOCK, 0, 0, 0); }
 	  body
           {
@@ -323,6 +326,27 @@ ifstmt	: IF conds THEN st ENDIF SEMI
 	    tmp = mergecode(tmp, $6.code);
 
 	    $$.code = mergecode(tmp, makecode(O_LAB, 0, label1));
+	    $$.val = 0;
+	  }
+	;
+forstmt : FOR st conds SEMI st DO st
+	  {
+	    int label0, label1;
+	    cptr *tmp;
+
+	    label0 = makelabel();
+	    label1 = makelabel();
+            tmp = $2.code;
+	    tmp = mergecode(tmp, makecode(O_LAB, 0, label0));
+	    tmp = mergecode(tmp, $3.code);
+	    tmp = mergecode(tmp, makecode(O_JPC, 0, label1));
+	    tmp = mergecode(tmp, $7.code);
+            tmp = mergecode(tmp, $5.code);
+	    tmp = mergecode(tmp, makecode(O_JMP, 0, label0));
+	    tmp = mergecode(tmp, makecode(O_LAB, 0, label1));
+
+	    $$.code = tmp; 
+			
 	    $$.val = 0;
 	  }
 	;
