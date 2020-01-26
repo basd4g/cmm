@@ -45,6 +45,7 @@ typedef struct Codeval {
 %token GE GT LE LT NE EQ
 %token RETURN
 %token DENIAL
+%token AND
 %%
 
 program : fdecls main {
@@ -293,7 +294,7 @@ st	: WRITE E SEMI
 	  }
 	;
 
-ifstmt	: IF cond THEN st ENDIF SEMI
+ifstmt	: IF conds THEN st ENDIF SEMI
 	  {
 	    cptr *tmp;
 	    int label0, label1;
@@ -306,7 +307,7 @@ ifstmt	: IF cond THEN st ENDIF SEMI
 	    $$.code = mergecode(tmp, makecode(O_LAB, 0, label0));
 	    $$.val = 0;
 	  }
-	| IF cond THEN st ELSE st ENDIF SEMI
+	| IF conds THEN st ELSE st ENDIF SEMI
 	  {
 	    cptr *tmp;
 	    int label0, label1;
@@ -325,7 +326,7 @@ ifstmt	: IF cond THEN st ENDIF SEMI
 	  }
 	;
 
-whilestmt	: WHILE cond DO st
+whilestmt	: WHILE conds DO st
 	  {
 	    int label0, label1;
 	    cptr *tmp;
@@ -345,6 +346,18 @@ whilestmt	: WHILE cond DO st
 	    $$.val = 0;
 	  }
 	;
+
+conds   : cond
+          {
+            $$.code = $1.code;
+          }
+        | cond AND cond
+          {
+            cptr *tmp;
+            tmp = mergecode($1.code, $3.code);
+            tmp = mergecode(tmp, makecode(O_OPR, 0, 4) );
+          }
+        ;
 
 cond	: E GT E
 	  {
