@@ -34,6 +34,7 @@
 "=="		{ ECHO;  return EQ; }
 "!"             { ECHO;  return DENIAL; }
 "&&"		{ ECHO;  return AND; }
+"||"            { ECHO;  return OR; }
 [0-9]+		{ ECHO;  
                   yylval.val = atoi(yytext);
 		  return NUMBER;

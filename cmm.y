@@ -46,6 +46,7 @@ typedef struct Codeval {
 %token RETURN
 %token DENIAL
 %token AND
+%token OR
 %%
 
 program : fdecls main {
@@ -347,11 +348,26 @@ whilestmt	: WHILE conds DO st
 	  }
 	;
 
-conds   : cond
+conds   : condsWeak;
+
+condsWeak : condsStrong
           {
             $$.code = $1.code;
           }
-        | cond AND cond
+        | condsWeak OR condsWeak
+          {
+            cptr *tmp;
+            tmp = mergecode($1.code, $3.code);
+            tmp = mergecode(tmp, makecode(O_OPR, 0, 2) );
+          }
+        ;
+
+
+condsStrong : cond
+          {
+            $$.code = $1.code;
+          }
+        | condsStrong AND condsStrong
           {
             cptr *tmp;
             tmp = mergecode($1.code, $3.code);
