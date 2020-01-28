@@ -37,6 +37,7 @@ typedef struct Codeval {
 %token SEMI
 %token PLUS MINUS
 %token MULT DIV MOD
+%token EXP
 %token NUMBER
 %token IF THEN ELSE ENDIF
 %token WHILE
@@ -497,8 +498,58 @@ T	: T MULT F
             $$.code = $1.code;
           }
 	;
+F       : F EXP G
+          {
+            int label_jump, label_calc, label_for, label_for_end;
+            cptr *tmp;
+            label_jump = makelabel();
+            label_calc = makelabel();
+            label_for = makelabel();
+            label_for_end = makelabel();
+            tmp = mergecode( $1.code, $3.code );
+            /* 累乗を計算する関数を呼ぶ */
+            tmp = mergecode( tmp, makecode(O_CAL, 0, label_calc) );
+            /* 累乗を計算する関数定義を飛ばす */
+            tmp = mergecode( tmp, makecode(O_JMP, 0, label_jump) );
 
-F	: ID
+            /* 累乗を計算する関数定義 */
+            /* a % b == a - ( a/b * b ) */
+            tmp = mergecode( tmp, makecode(O_LAB, 0, label_calc) );
+            tmp = mergecode( tmp, makecode(O_INT, 0,  5) );
+            tmp = mergecode( tmp, makecode(O_LIT, 0,  1) );
+            tmp = mergecode( tmp, makecode(O_STO, 0,  3) );
+
+            tmp = mergecode( tmp, makecode(O_LIT, 0,  0) );
+            tmp = mergecode( tmp, makecode(O_STO, 0,  4) );
+            tmp = mergecode( tmp, makecode(O_LAB, 0,  label_for) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0,  4) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0, -1) );
+            tmp = mergecode( tmp, makecode(O_OPR, 0, 10) );
+            tmp = mergecode( tmp, makecode(O_JPC, 0,  label_for_end) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0,  3) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0, -2) );
+            tmp = mergecode( tmp, makecode(O_OPR, 0,  4) );
+            tmp = mergecode( tmp, makecode(O_STO, 0,  3) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0,  4) );
+            tmp = mergecode( tmp, makecode(O_LIT, 0,  1) );
+            tmp = mergecode( tmp, makecode(O_OPR, 0,  2) );
+            tmp = mergecode( tmp, makecode(O_STO, 0,  4) );
+            tmp = mergecode( tmp, makecode(O_JMP, 0,  label_for) );
+            tmp = mergecode( tmp, makecode(O_LAB, 0,  label_for_end) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0,  3) );
+            tmp = mergecode( tmp, makecode(O_RET, 0,  2) );
+
+            /* 累乗を計算する関数定義をここまで飛ばす */
+            tmp = mergecode( tmp, makecode(O_LAB, 0, label_jump) );
+            $$.code = tmp;
+          }
+        | G
+          {
+            $$.code = $1.code;
+          }
+	;
+
+G	: ID
 	  {
 	    cptr *tmpc;
 	    list* tmpl;
