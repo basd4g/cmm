@@ -18,6 +18,7 @@
 "*"		{ ECHO;  return MULT; }
 "/"		{ ECHO;  return DIV; }
 "%"		{ ECHO;  return MOD; }
+"^"		{ ECHO;  return EXP; }
 "if"		{ ECHO;  return IF; }
 "then"		{ ECHO;  return THEN; }
 "else"		{ ECHO;  return ELSE; }
