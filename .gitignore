@@ -4,3 +4,4 @@ pl0i
 *.o
 *.c
 code.output
+.DS_Store
