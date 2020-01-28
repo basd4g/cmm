@@ -1,0 +1,7 @@
+main {
+  var i;
+  read i;
+  write i%3;
+  writeln;
+}
+
