@@ -76,6 +76,17 @@ main {
 }
 ```
 
+4. exp
+
+```
+main {
+  var i;
+  read i;
+  write i ^ 3;
+  writeln;
+}
+```
+
 ## License
 
 GPL ([License](./LICENSE))
