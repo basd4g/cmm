@@ -36,7 +36,7 @@ typedef struct Codeval {
 %token WRITELN
 %token SEMI
 %token PLUS MINUS
-%token MULT DIV
+%token MULT DIV MOD
 %token NUMBER
 %token IF THEN ELSE ENDIF
 %token WHILE
@@ -462,6 +462,35 @@ T	: T MULT F
           {
             $$.code = mergecode(mergecode($1.code, $3.code),
 				makecode(O_OPR, 0, 5));
+          }
+        | T MOD  F
+          {
+            int label_jump, label_calc;
+            cptr *tmp;
+            label_jump = makelabel();
+            label_calc = makelabel();
+            tmp = mergecode( $1.code, $3.code );
+            /* 余りを計算する関数を呼ぶ */
+            tmp = mergecode( tmp, makecode(O_CAL, 0, label_calc) );
+            /* 余りを計算する関数定義を飛ばす */
+            tmp = mergecode( tmp, makecode(O_JMP, 0, label_jump) );
+
+            /* 余りを計算する関数定義 */
+            /* a % b == a - ( a/b * b ) */
+            tmp = mergecode( tmp, makecode(O_LAB, 0, label_calc) );
+            tmp = mergecode( tmp, makecode(O_INT, 0,  3) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0, -2) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0, -2) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0, -1) );
+            tmp = mergecode( tmp, makecode(O_OPR, 0,  5) );
+            tmp = mergecode( tmp, makecode(O_LOD, 0, -1) );
+            tmp = mergecode( tmp, makecode(O_OPR, 0,  4) );
+            tmp = mergecode( tmp, makecode(O_OPR, 0,  3) );
+            tmp = mergecode( tmp, makecode(O_RET, 0,  2) );
+
+            /* 余りを計算する関数定義をここまで飛ばす */
+            tmp = mergecode( tmp, makecode(O_LAB, 0, label_jump) );
+            $$.code = tmp;
           }
         | F
           {
