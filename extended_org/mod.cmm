@@ -1,0 +1,11 @@
+mod(i, j){
+  return i - (i / j * j);
+}
+
+main {
+  var i,j;
+  read i;
+  read j;
+  write mod(i,j);
+  writeln;
+}

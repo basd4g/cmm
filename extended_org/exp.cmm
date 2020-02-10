@@ -1,0 +1,17 @@
+exp(a, b){
+  var i,ret;
+  i:=0;
+  ret :=1;
+  while i<b do {
+    ret := ret*a;
+    i:=i+1;
+  }
+  return ret;
+}
+main {
+  var i,j;
+  read i;
+  read j;
+  write exp(i,j);
+  writeln;
+}
