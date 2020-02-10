@@ -4,30 +4,40 @@
 
 cmm (C--) is a C-like programming language.
 
-The repository's cmm is extended a cmm of a book, 'Compiler' ([コンパイラ - コロナ社](http://www.slis.tsukuba.ac.jp/~nakai.hisashi.gt/Compiler/))
+The cmm is extended a cmm of a book, 'Compiler' ([コンパイラ - コロナ社](http://www.slis.tsukuba.ac.jp/~nakai.hisashi.gt/Compiler/))
 
 ## Usage
 
 The cmm compiler is compile from cmm to pl0i' assembly.
 
-Run cmm with [cmm compiler](https://github.com/basd4g/cmm) and [pl0i](https://github.com/basd4g/pl0i).
-
 ```sh
 # setup cmm
-$ git clone https://github.com/basd4g/cmm.git
-$ cd cmm
 $ make
+
+# setup pl0i
+$ curl http://www.slis.tsukuba.ac.jp/~nakai.hisashi.gt/Compiler/Compiler.tar.gz > Compiler.tar.gz
+$ tar -zxvf Compiler.tar.gz 
+$ cd Compiler/pl0i_src/
+$ make
+$ cd ../../
+$ mv Compiler/pl0i_src/pl0i ./
+$ rm -rf Compiler Compiler.tar.gz 
 
 # compile ./sample/test (cmm) -> ./code.output (pl0i's assembly)
 $ cat sample/test | ./cmm
 
-# setup pl0i
-$ git clone https://github.com/basd4g/pl0i.git
-$ cd pl0i
-$ make
-
 # run code.output
-$ ./pl0i ../code.output
+$ ./pl0i
+```
+
+## Sample programs
+
+```sh
+cat extended_sample/cond.cmm | ./cmm && ./pl0i
+cat extended_sample/exp.cmm | ./cmm && ./pl0i
+cat extended_sample/for.cmm | ./cmm && ./pl0i
+cat extended_sample/mod.cmm | ./cmm && ./pl0i
+cat extended_sample/while.cmm | ./cmm && ./pl0i
 ```
 
 ## Extended syntax
@@ -93,13 +103,12 @@ GPL ([License](./LICENSE))
 
 ## Author
 
-The cmm is extended by [basd4g](https://github.com/basd4g).
+The cmm is extended by Keisuke, Nakayama.
 
-The basis on this repository's cmm is developed by Hisashi Nakai. 
+The basis on this cmm is developed by Hisashi Nakai. 
 
 ## Reference
 
 - [コロナ社 コンパイラ](https://www.coronasha.co.jp/np/isbn/9784339027082/)
 - [コンパイラ サポートページ - 中井央](http://www.slis.tsukuba.ac.jp/~nakai.hisashi.gt/Compiler/)
-
 
